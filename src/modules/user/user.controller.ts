@@ -3,6 +3,8 @@ import { UserDto } from './dto/user.dto';
 import { UserService } from './user.service';
 import { User } from './user.entity';
 import { AuthGuard } from '@nestjs/passport';
+import { Roles } from '../role/decorators/role.decorator';
+import { RoleGuard } from '../role/guards/role.guard';
 
 @Controller('users')
 // @UseGuards( AuthGuard() ) // You could set it globally, for guard all UserController routes
@@ -10,6 +12,8 @@ export class UserController {
     constructor( private readonly _userService: UserService ) {}
 
     @Get(':id')
+    @Roles('ADMIN', 'AUTHOR') // Custom decorator witch returns roles array
+    @UseGuards( AuthGuard(), RoleGuard ) // Custom guard witch verifies if the user has the defined decorator roles 
     async getUser( @Param('id', ParseIntPipe ) id: number ): Promise<User> {
         const user = await this._userService.get( id );
         return user;
