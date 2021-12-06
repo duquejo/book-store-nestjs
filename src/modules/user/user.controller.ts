@@ -1,9 +1,11 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGuards } from '@nestjs/common';
 import { UserDto } from './dto/user.dto';
 import { UserService } from './user.service';
 import { User } from './user.entity';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('users')
+// @UseGuards( AuthGuard() ) // You could set it globally, for guard all UserController routes
 export class UserController {
     constructor( private readonly _userService: UserService ) {}
 
@@ -13,6 +15,7 @@ export class UserController {
         return user;
     }
 
+    @UseGuards( AuthGuard() ) // You could use directly in endpoint
     @Get()
     async getUsers(): Promise<User[]> {
         const users = await this._userService.getAll();
