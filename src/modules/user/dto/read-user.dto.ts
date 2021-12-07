@@ -1,7 +1,7 @@
 import { IsEmail, IsNumber, IsString } from "class-validator";
 import { ReadUserDetailDto } from './read-user-details.dto';
 import { Type, Expose, Exclude } from 'class-transformer';
-import { ReadUserRolesDto } from './read-user-roles.dto';
+import { ReadRoleDto } from '../../role/dtos/read-role.dto';
 
 @Exclude()
 export class ReadUserDto {
@@ -27,6 +27,6 @@ export class ReadUserDto {
     readonly details: ReadUserDetailDto
 
     @Expose()
-    @Type( type => ReadUserRolesDto )
-    readonly roles: ReadUserRolesDto[]; // Exclude unuseful properties from rtole
+    @Type( type => ReadRoleDto )
+    readonly roles: ReadRoleDto[]; // Exclude unuseful properties from rtole
 }

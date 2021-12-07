@@ -21,7 +21,7 @@ export class UserController {
         return this._userService.get( userId );
     }
 
-    @UseGuards( AuthGuard() ) // You could use directly in endpoint
+    // @UseGuards( AuthGuard() ) // You could use directly in endpoint
     @Get()
     getUsers(): Promise<ReadUserDto[]> {
         return this._userService.getAll();
