@@ -8,6 +8,8 @@ import { compare } from 'bcryptjs';
 import { IJwtPayload } from './jwt-payload.interface';
 import { RoleType } from '../role/roleType.enum';
 import { User } from '../user/user.entity';
+import { plainToClass } from 'class-transformer';
+import { LoggedInDto } from './dto/logged-in.dto';
 
 @Injectable()
 export class AuthService {
@@ -28,7 +30,7 @@ export class AuthService {
         return this._authRepository.signup( signupDto );
     }
 
-    async singin( signinDto: SigninDto ): Promise<{ token : string }>{
+    async singin( signinDto: SigninDto ): Promise<LoggedInDto>{
         const { username, password } = signinDto;
         
         /**
@@ -55,7 +57,7 @@ export class AuthService {
             roles: user.roles.map( role => role.name as RoleType ) // Explicit RoleType def
         };
 
-        const token = await this._jwtService.sign( payload );
-        return { token };
+        const token = this._jwtService.sign( payload );
+        return plainToClass( LoggedInDto, { token, user });
     }
 }
